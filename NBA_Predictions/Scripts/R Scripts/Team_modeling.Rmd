@@ -1,0 +1,307 @@
+---
+title: "Team_Modeling"
+author: "Nick Smailer"
+date: "2024-11-30"
+output: html_document
+runtime: shiny
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+# import packages. if not already installed, packages must be installed using  install.packages("x") with x replacing the package name
+
+library(shiny)
+library(dplyr)
+library(randomForest)
+library(jsonlite)
+
+
+## start ui configuration
+ui <- fluidPage(
+  titlePanel("Predicting Playoff Teams Using Win Thresholds"),
+  
+# rows for buttons- import, playoff %, win input, win adjustment, subset creation, adjusting for bias, training the model, year input, prediction based on year
+
+  fluidRow(
+    column(12, actionButton("import_btn", "Import Data"))
+  ),
+    
+  fluidRow(
+    column(6, actionButton("calc_playoff_percentage_btn", "Calculate Playoff Percentage"))
+  ),
+  
+  
+  fluidRow(
+    column(6, numericInput("w_threshold", "Enter Win Threshold:", value = 42, min = 0)),
+    column(6, actionButton("adjust_btn", "Adjust Win Data"))
+  ),
+  
+   
+  fluidRow(
+    column(12, actionButton("subset_btn", "Create Subset"))
+  ),
+  
+  
+  fluidRow(
+    column(6, actionButton("standardize_btn", "Standardize Classes"))
+  ),
+  
+  fluidRow(
+    column(6, actionButton("train_rf_btn", "Train Random Forest"))
+  ),
+  
+  fluidRow(
+    column(6, selectInput("season", "Select Season", choices = NULL)) 
+  ),
+      
+  fluidRow(
+    column(6, actionButton("predict_btn", "Predict Outcome"))
+  ),
+
+  
+# text outputs for feedback
+  verbatimTextOutput("output_text"),
+  htmlOutput("seasons_text"),
+  htmlOutput("teams_text"),
+  verbatimTextOutput("prediction_output"),
+  verbatimTextOutput("playoff_percentage_output") 
+)
+
+# begin server definition- defining functionality for different buttons
+server <- function(input, output, session) {
+  
+  # initialize empty variables for team tables and random forest model
+  JSON_team_facts <- NULL
+  JSON_seasons <- NULL
+  JSON_teams <- NULL
+  rf_model <- NULL 
+  
+# load data when button is clicked- adjust file paths to reflect where they are stored upon download
+  observeEvent(input$import_btn, {
+    JSON_team_facts <<- fromJSON('C:\\Users\\Nick\\JSON Team\\fact_table_202411301438.json')
+    JSON_team_facts <<- JSON_team_facts[[1]]
+    
+    JSON_seasons <<- fromJSON("C:\\Users\\Nick\\JSON Team\\season_202411301438.json")
+    JSON_seasons <<- JSON_seasons[[1]]
+    
+    JSON_teams <<- fromJSON("C:\\Users\\Nick\\JSON Team\\team_202411301439.json")
+    JSON_teams <<- JSON_teams[[1]]
+    
+    
+    output$output_text <- renderText({
+      paste("Data has been successfully imported!")
+    })
+    
+    # update the season ID selection input
+    updateSelectInput(session, "season", choices = JSON_seasons$season)
+  })
+  
+# create a subset of the data when button is clicked
+  observeEvent(input$subset_btn, {
+    if (!is.null(JSON_team_facts)) {
+      JSON_team_facts <<- JSON_team_facts %>%
+        dplyr::select(-sos, -f_tr, -ft_fga, -opp_e_fg_percent, -opp_tov_percent, -opp_drb_percent, 
+                      -opp_ft_fga, -x3p_ar, -tov_percent, -orb_percent, -x3p_per_game, -x2p_per_game, 
+                      -fta_per_game, -o_rtg, -d_rtg, -mov, -pace, -srs, -mp_per_game, -pf_per_game, -playoffs, -arena)
+      
+      output$output_text <- renderText({
+        paste("Subset has been successfully created!")
+      })
+    } else {
+      output$output_text <- renderText({
+        paste("Data is not imported yet. Please import the data first.")
+      })
+    }
+  })
+  
+  # show seasons data when the button is clicked- not in use
+  observeEvent(input$show_seasons, {
+    output$seasons_text <- renderUI({
+      seasons_data <- paste0("<b>Seasons Data:</b><br>","season_id | season<br>")
+      seasons_data <- paste0(seasons_data,
+                             paste0("<div>", JSON_seasons$season_id, " | ", JSON_seasons$season, "</div>", collapse = ""))
+      HTML(seasons_data)  
+    })
+  })
+  
+  # show teams data when the button is clicked- not in use
+  observeEvent(input$show_teams, {
+    output$teams_text <- renderUI({
+      teams_data <- paste0("<b>Teams Data:</b><br>","team_id | team_name<br>")
+      teams_data <- paste0(teams_data,
+                           paste0("<div>", JSON_teams$team_id, " | ", JSON_teams$team_name, "</div>", collapse = ""))
+      HTML(teams_data) 
+    })
+  })
+  
+# adjust win total based on threshold and create a new binary column
+  observeEvent(input$adjust_btn, {
+    w_threshold <- input$w_threshold
+    
+  # adjust the wins column based on threshold
+    JSON_team_facts <<- JSON_team_facts %>%
+      mutate(w = ifelse(w > w_threshold, 1, 0))
+    
+    output$output_text <- renderText({
+      paste(
+        "Win total adjusted with threshold ", w_threshold, ":\n",
+        "Class distribution after threshold adjustment:\n",
+        paste0("Class 0: ", sum(JSON_team_facts$w == 0), "\n", "Class 1: ",         sum(JSON_team_facts$w == 1))
+      )
+    })
+  })
+  
+# standardize the classes by minority class size
+  observeEvent(input$standardize_btn, {
+   
+    class_counts <- table(JSON_team_facts$w)
+    
+    min_class_size <- min(class_counts)
+    
+    balanced_data <- JSON_team_facts %>%
+      group_by(w) %>%
+      sample_n(min_class_size) %>%
+      ungroup()
+    
+    output$output_text <- renderText({
+      paste(
+        "Class standardization applied:\n",
+        "Class distribution after standardization:\n",
+        paste0("Class 0: ", sum(balanced_data$w == 0), "\n", 
+               "Class 1: ", sum(balanced_data$w == 1))
+      )
+    })
+    
+    w_factor <- as.factor(balanced_data$w)
+    
+    balanced_data$w <- w_factor
+    
+    # update the JSON_team_facts with the balanced data
+    JSON_team_facts <<- balanced_data
+  }) 
+  
+# train Random Forest model
+  observeEvent(input$train_rf_btn, {
+    if (!is.null(JSON_team_facts)) {
+      model_data <- JSON_team_facts %>%
+        mutate_if(is.factor, as.numeric)  
+    
+      model_factor <- as.factor(model_data$w)
+      model_data$w <- model_factor
+    
+      rf_model <<- randomForest(w ~ ., data = model_data)
+    
+      output$output_text <- renderText({
+        paste("Random Forest model has been successfully trained!")
+      })
+    } else {
+      output$output_text <- renderText({
+        paste("Data is not imported yet. Please import the data first.")
+      })
+    }
+  })
+  
+# Prediction button- returns teams above threshold for selected season
+observeEvent(input$predict_btn, {
+    
+    season_input <- input$season
+    
+    season_input <- as.numeric(season_input) 
+    
+    season_id1 <- JSON_seasons %>%
+      filter(season == season_input) %>%
+      pull(season_id)  
+    
+    if (length(season_id1) == 0) {
+        output$prediction_output <- renderText({
+            paste("Invalid season entered. Please select a valid season.")
+        })
+        return()  
+    }
+    
+    selected_data <- JSON_team_facts %>%
+      filter(season_id == season_id1)
+    
+    if (nrow(selected_data) > 0) {
+
+        selected_data$w <- as.numeric(as.character(selected_data$w))  
+        
+        selected_w <- ifelse(selected_data$w > 0, 1, 0)  
+        selected_data$w <- selected_w
+
+        predictions <- predict(rf_model, selected_data)
+        
+        # map the predicted values: 2 -> 1, 1 -> 0 
+        predicted_values <- ifelse(predictions == 2, 1, 0)  
+        selected_data$predicted_w <- predicted_values
+        
+        selected_data_filtered <- selected_data %>%
+          filter(predicted_w == 1) %>%  
+          distinct(team_id, .keep_all = TRUE)  
+        
+        selected_data_filtered <- selected_data_filtered %>%
+          left_join(JSON_teams, by = "team_id")  
+        
+        output$prediction_output <- renderText({
+        predictions_text <- paste("Predictions for Season: ", season_input, ":\n")
+
+            predictions_text <- paste0(predictions_text, paste0("Team: ",             selected_data_filtered$team_name, "\n", collapse = ""))
+            predictions_text
+        })
+    } else {
+        # handle the case when no data is available for the selected season
+        output$prediction_output <- renderText({
+            paste("No data available for the selected season.")
+        })
+    }
+})
+  
+# playoff percentage calculation button functionality
+observeEvent(input$calc_playoff_percentage_btn, {
+ 
+  wins_input <- as.numeric(input$w_threshold)
+  
+  if (is.na(wins_input)) {
+    output$playoff_percentage_output <- renderText({
+      "Please enter a valid number of wins."
+    })
+    return()  
+  }
+  
+  if (!is.null(JSON_team_facts)) {
+    filtered_data <- subset(JSON_team_facts, w == wins_input)
+    
+    if (nrow(filtered_data) == 0) {
+      output$playoff_percentage_output <- renderText({
+        paste("No teams found with", wins_input, "wins.")
+      })
+      return()  
+    }
+    
+    total_teams <- nrow(filtered_data)
+    teams_in_playoffs <- sum(filtered_data$playoffs == TRUE)
+    
+    playoff_percentage <- (teams_in_playoffs / total_teams) * 100
+    
+    output$playoff_percentage_output <- renderText({
+      paste("Percentage of teams with", wins_input, "wins that made the playoffs:", 
+            round(playoff_percentage, 2), "%")
+    })
+  } else {
+    output$playoff_percentage_output <- renderText({
+      "Data not loaded or missing."
+    })
+  }
+})
+}
+
+# run the app
+shinyApp(ui = ui, server = server)
+
+
+
+
+
+
+
+

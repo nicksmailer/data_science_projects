@@ -1,0 +1,228 @@
+{
+"team": [
+	{
+		"team_id" : 1,
+		"team" : "ATL",
+		"team_name" : null
+	},
+	{
+		"team_id" : 2,
+		"team" : "BOS",
+		"team_name" : null
+	},
+	{
+		"team_id" : 3,
+		"team" : "BRK",
+		"team_name" : null
+	},
+	{
+		"team_id" : 4,
+		"team" : "BUF",
+		"team_name" : null
+	},
+	{
+		"team_id" : 5,
+		"team" : "CAP",
+		"team_name" : null
+	},
+	{
+		"team_id" : 6,
+		"team" : "CHA",
+		"team_name" : null
+	},
+	{
+		"team_id" : 7,
+		"team" : "CHH",
+		"team_name" : null
+	},
+	{
+		"team_id" : 8,
+		"team" : "CHI",
+		"team_name" : null
+	},
+	{
+		"team_id" : 9,
+		"team" : "CHO",
+		"team_name" : null
+	},
+	{
+		"team_id" : 10,
+		"team" : "CLE",
+		"team_name" : null
+	},
+	{
+		"team_id" : 11,
+		"team" : "DAL",
+		"team_name" : null
+	},
+	{
+		"team_id" : 12,
+		"team" : "DEN",
+		"team_name" : null
+	},
+	{
+		"team_id" : 13,
+		"team" : "DET",
+		"team_name" : null
+	},
+	{
+		"team_id" : 14,
+		"team" : "GSW",
+		"team_name" : null
+	},
+	{
+		"team_id" : 15,
+		"team" : "HOU",
+		"team_name" : null
+	},
+	{
+		"team_id" : 16,
+		"team" : "IND",
+		"team_name" : null
+	},
+	{
+		"team_id" : 17,
+		"team" : "KCK",
+		"team_name" : null
+	},
+	{
+		"team_id" : 18,
+		"team" : "KCO",
+		"team_name" : null
+	},
+	{
+		"team_id" : 19,
+		"team" : "LAC",
+		"team_name" : null
+	},
+	{
+		"team_id" : 20,
+		"team" : "LAL",
+		"team_name" : null
+	},
+	{
+		"team_id" : 21,
+		"team" : "MEM",
+		"team_name" : null
+	},
+	{
+		"team_id" : 22,
+		"team" : "MIA",
+		"team_name" : null
+	},
+	{
+		"team_id" : 23,
+		"team" : "MIL",
+		"team_name" : null
+	},
+	{
+		"team_id" : 24,
+		"team" : "MIN",
+		"team_name" : null
+	},
+	{
+		"team_id" : 25,
+		"team" : "NJN",
+		"team_name" : null
+	},
+	{
+		"team_id" : 26,
+		"team" : "NOH",
+		"team_name" : null
+	},
+	{
+		"team_id" : 27,
+		"team" : "NOJ",
+		"team_name" : null
+	},
+	{
+		"team_id" : 28,
+		"team" : "NOK",
+		"team_name" : null
+	},
+	{
+		"team_id" : 29,
+		"team" : "NOP",
+		"team_name" : null
+	},
+	{
+		"team_id" : 30,
+		"team" : "NYK",
+		"team_name" : null
+	},
+	{
+		"team_id" : 31,
+		"team" : "NYN",
+		"team_name" : null
+	},
+	{
+		"team_id" : 32,
+		"team" : "OKC",
+		"team_name" : null
+	},
+	{
+		"team_id" : 33,
+		"team" : "ORL",
+		"team_name" : null
+	},
+	{
+		"team_id" : 34,
+		"team" : "PHI",
+		"team_name" : null
+	},
+	{
+		"team_id" : 35,
+		"team" : "PHO",
+		"team_name" : null
+	},
+	{
+		"team_id" : 36,
+		"team" : "POR",
+		"team_name" : null
+	},
+	{
+		"team_id" : 37,
+		"team" : "SAC",
+		"team_name" : null
+	},
+	{
+		"team_id" : 38,
+		"team" : "SAS",
+		"team_name" : null
+	},
+	{
+		"team_id" : 39,
+		"team" : "SDC",
+		"team_name" : null
+	},
+	{
+		"team_id" : 40,
+		"team" : "SEA",
+		"team_name" : null
+	},
+	{
+		"team_id" : 41,
+		"team" : "TOR",
+		"team_name" : null
+	},
+	{
+		"team_id" : 42,
+		"team" : "UTA",
+		"team_name" : null
+	},
+	{
+		"team_id" : 43,
+		"team" : "VAN",
+		"team_name" : null
+	},
+	{
+		"team_id" : 44,
+		"team" : "WAS",
+		"team_name" : null
+	},
+	{
+		"team_id" : 45,
+		"team" : "WSB",
+		"team_name" : null
+	}
+]}
