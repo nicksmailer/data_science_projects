@@ -1,0 +1,187 @@
+{
+"season": [
+	{
+		"season_id" : "1",
+		"season" : 1974
+	},
+	{
+		"season_id" : "2",
+		"season" : 1975
+	},
+	{
+		"season_id" : "3",
+		"season" : 1976
+	},
+	{
+		"season_id" : "4",
+		"season" : 1977
+	},
+	{
+		"season_id" : "5",
+		"season" : 1978
+	},
+	{
+		"season_id" : "6",
+		"season" : 1979
+	},
+	{
+		"season_id" : "7",
+		"season" : 1980
+	},
+	{
+		"season_id" : "8",
+		"season" : 1981
+	},
+	{
+		"season_id" : "9",
+		"season" : 1982
+	},
+	{
+		"season_id" : "10",
+		"season" : 1983
+	},
+	{
+		"season_id" : "11",
+		"season" : 1984
+	},
+	{
+		"season_id" : "12",
+		"season" : 1985
+	},
+	{
+		"season_id" : "13",
+		"season" : 1986
+	},
+	{
+		"season_id" : "14",
+		"season" : 1987
+	},
+	{
+		"season_id" : "15",
+		"season" : 1988
+	},
+	{
+		"season_id" : "16",
+		"season" : 1989
+	},
+	{
+		"season_id" : "17",
+		"season" : 1990
+	},
+	{
+		"season_id" : "18",
+		"season" : 1991
+	},
+	{
+		"season_id" : "19",
+		"season" : 1992
+	},
+	{
+		"season_id" : "20",
+		"season" : 1993
+	},
+	{
+		"season_id" : "21",
+		"season" : 1994
+	},
+	{
+		"season_id" : "22",
+		"season" : 1995
+	},
+	{
+		"season_id" : "23",
+		"season" : 1996
+	},
+	{
+		"season_id" : "24",
+		"season" : 1997
+	},
+	{
+		"season_id" : "25",
+		"season" : 1998
+	},
+	{
+		"season_id" : "26",
+		"season" : 2000
+	},
+	{
+		"season_id" : "27",
+		"season" : 2001
+	},
+	{
+		"season_id" : "28",
+		"season" : 2002
+	},
+	{
+		"season_id" : "29",
+		"season" : 2003
+	},
+	{
+		"season_id" : "30",
+		"season" : 2004
+	},
+	{
+		"season_id" : "31",
+		"season" : 2005
+	},
+	{
+		"season_id" : "32",
+		"season" : 2006
+	},
+	{
+		"season_id" : "33",
+		"season" : 2007
+	},
+	{
+		"season_id" : "34",
+		"season" : 2008
+	},
+	{
+		"season_id" : "35",
+		"season" : 2009
+	},
+	{
+		"season_id" : "36",
+		"season" : 2010
+	},
+	{
+		"season_id" : "37",
+		"season" : 2011
+	},
+	{
+		"season_id" : "38",
+		"season" : 2014
+	},
+	{
+		"season_id" : "39",
+		"season" : 2015
+	},
+	{
+		"season_id" : "40",
+		"season" : 2016
+	},
+	{
+		"season_id" : "41",
+		"season" : 2017
+	},
+	{
+		"season_id" : "42",
+		"season" : 2018
+	},
+	{
+		"season_id" : "43",
+		"season" : 2019
+	},
+	{
+		"season_id" : "44",
+		"season" : 2022
+	},
+	{
+		"season_id" : "45",
+		"season" : 2023
+	},
+	{
+		"season_id" : "46",
+		"season" : 2024
+	}
+]}
